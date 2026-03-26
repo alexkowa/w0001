@@ -40,23 +40,6 @@ static void prv_draw_marker_line(GContext *ctx, GPoint center, int32_t angle,
                      prv_point_on_circle(center, angle, inner_radius));
 }
 
-static void prv_draw_circle_marker(GContext *ctx, GPoint center, int32_t angle,
-                                   int16_t radius, int16_t stem_length,
-                                   uint8_t circle_radius) {
-  GPoint marker_center = prv_point_on_circle(center, angle, radius);
-  GPoint stem_end = prv_point_on_circle(center, angle, radius - stem_length);
-
-  graphics_context_set_stroke_color(ctx, MARKER_COLOR);
-  graphics_context_set_stroke_width(ctx, 1);
-  graphics_draw_line(ctx, marker_center, stem_end);
-
-  graphics_context_set_fill_color(ctx, DIAL_COLOR);
-  graphics_fill_circle(ctx, marker_center, circle_radius);
-
-  graphics_context_set_stroke_color(ctx, BEZEL_COLOR);
-  graphics_draw_circle(ctx, marker_center, circle_radius);
-}
-
 static void prv_draw_dial(GContext *ctx, GRect bounds) {
   const GPoint center = grect_center_point(&bounds);
   const int16_t outer_radius = bounds.size.w / 2 - 2;
@@ -64,9 +47,8 @@ static void prv_draw_dial(GContext *ctx, GRect bounds) {
   const int16_t marker_outer = dial_radius;
   const int16_t tick_inner = marker_outer - 34;
   const int16_t minute_tick_length = 6;
-  const int16_t minute_tick_outer = marker_outer;
+  const int16_t minute_tick_outer = marker_outer - minute_tick_length;
   const int16_t minute_tick_inner = minute_tick_outer - minute_tick_length;
-  const int16_t tick_stem_length = marker_outer - tick_inner;
 
   graphics_context_set_fill_color(ctx, DIAL_COLOR);
   graphics_fill_circle(ctx, center, dial_radius);
@@ -92,18 +74,11 @@ static void prv_draw_dial(GContext *ctx, GRect bounds) {
   }
 
   for (int hour = 1; hour < 12; ++hour) {
-    if (hour == 3 || hour == 9) {
-      continue;
-    }
-
     const int32_t angle = TRIG_MAX_ANGLE * hour / 12;
-    prv_draw_marker_line(ctx, center, angle, marker_outer, tick_inner, MARKER_COLOR, 2);
+    prv_draw_marker_line(ctx, center, angle, marker_outer, tick_inner, MARKER_COLOR, 1);
   }
 
-  prv_draw_marker_line(ctx, center, 0, marker_outer, tick_inner, MARKER_COLOR, 2);
-  prv_draw_circle_marker(ctx, center, TRIG_MAX_ANGLE / 4, marker_outer, tick_stem_length, 4);
-  prv_draw_circle_marker(ctx, center, TRIG_MAX_ANGLE / 2, marker_outer, tick_stem_length, 4);
-  prv_draw_circle_marker(ctx, center, TRIG_MAX_ANGLE * 3 / 4, marker_outer, tick_stem_length, 4);
+  prv_draw_marker_line(ctx, center, 0, marker_outer, tick_inner, MARKER_COLOR, 1);
 
   const int16_t top_circle_y = center.y - marker_outer;
   const int16_t top_circle_offset = 8;
