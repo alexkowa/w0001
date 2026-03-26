@@ -6,6 +6,7 @@
 #define MARKER_COLOR GColorFromRGB(110, 110, 110)
 #define TEXT_COLOR GColorFromRGB(92, 92, 92)
 #define ACCENT_COLOR GColorFromRGB(204, 36, 36)
+#define DATE_BOX_COLOR GColorFromRGB(180, 180, 180)
 #define SECOND_HAND_COLOR GColorFromRGB(188, 180, 156)
 #define HAND_BASE_COLOR GColorFromRGB(176, 176, 176)
 
@@ -42,7 +43,7 @@ static void prv_draw_marker_line(GContext *ctx, GPoint center, int32_t angle,
 
 static void prv_draw_dial(GContext *ctx, GRect bounds) {
   const GPoint center = grect_center_point(&bounds);
-  const int16_t outer_radius = bounds.size.w / 2 - 2;
+  const int16_t outer_radius = bounds.size.w / 2 ;
   const int16_t dial_radius = outer_radius - 4;
   const int16_t marker_outer = dial_radius;
   const int16_t tick_inner = marker_outer - 34;
@@ -97,7 +98,7 @@ static void prv_draw_branding(GContext *ctx, GRect bounds) {
 
   graphics_context_set_text_color(ctx, TEXT_COLOR);
   graphics_draw_text(ctx, "AUTOMATIC", s_subtitle_font,
-                     GRect(center.x - 50, center.y + 2, 100, 16),
+                     GRect(center.x - 50, center.y - 70, 100, 16),
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
   graphics_draw_text(ctx, "MADE IN AUSTRIA", s_footer_font,
                      GRect(center.x - 55, center.y + 72, 110, 12),
@@ -109,17 +110,18 @@ static void prv_draw_date_window(GContext *ctx, GRect bounds) {
   char date_buffer[3];
   snprintf(date_buffer, sizeof(date_buffer), "%d", s_current_time.tm_mday);
 
-  const GRect frame = GRect(center.x + 64, center.y - 12, 34, 24);
+  const GRect frame = GRect(center.x + 64, center.y - 10, 30, 20);
+  const GRect text_frame = GRect(frame.origin.x, frame.origin.y - 3, frame.size.w, frame.size.h);
 
   graphics_context_set_fill_color(ctx, GColorWhite);
   graphics_fill_rect(ctx, frame, 0, GCornerNone);
 
-  graphics_context_set_stroke_color(ctx, ACCENT_COLOR);
+  graphics_context_set_stroke_color(ctx, DATE_BOX_COLOR);
   graphics_context_set_stroke_width(ctx, 1);
   graphics_draw_rect(ctx, frame);
 
   graphics_context_set_text_color(ctx, ACCENT_COLOR);
-  graphics_draw_text(ctx, date_buffer, s_date_font, frame,
+  graphics_draw_text(ctx, date_buffer, s_date_font, text_frame,
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
 }
 
