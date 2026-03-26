@@ -1,0 +1,22 @@
+{
+  "name": "w0001",
+  "author": "MakeAwesomeHappen",
+  "version": "1.0.0",
+  "keywords": ["pebble-app"],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "Automatic Round",
+    "uuid": "6824a9ea-0818-41df-a3fe-a4745ea8a8ec",
+    "sdkVersion": "3",
+    "targetPlatforms": [
+      "gabbro"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "resources": {
+      "media": []
+    }
+  }
+}

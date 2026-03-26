@@ -1,0 +1,8 @@
+build/src/*.o
+build/basalt/*.bin
+build/src/c/*.o
+build/gabbro/src/*.o
+build/chalk/*.bin
+build/gabbro/*.o
+build/*.pbw
+build/c4che
