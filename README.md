@@ -1,4 +1,4 @@
-# Junghans Round Pebble Watchface
+# Minimal Round Pebble Watchface
 
 Screenshot from the `gabbro` emulator:
 
